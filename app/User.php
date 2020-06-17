@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Category;
 use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -15,7 +16,7 @@ class User extends Authenticatable
     const VERIFIED_USER= '1';
     const UNVERIFIED_USER= '0';
 
-
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
@@ -53,5 +54,9 @@ class User extends Authenticatable
 
     public static function generateVerificationCode(){
         return Str::random(40);
+    }
+
+    public function categories(){
+        return $this->belongsToMany(Category::class);
     }
 }

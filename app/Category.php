@@ -2,8 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use App\User;
 use App\Vendor;
+use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
@@ -14,5 +15,9 @@ class Category extends Model
 
     public function vendors(){
         return $this->belongsToMany(Vendor::class);
+    }
+
+    public function users(){
+        return $this->hasMany(User::class);
     }
 }

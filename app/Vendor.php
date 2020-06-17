@@ -17,7 +17,7 @@ class Vendor extends Model
         'description',
         'status',
         'seller_id',
-        'amount'
+        'amount',
     ];
 
 

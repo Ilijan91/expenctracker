@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Vendor;
+
 use App\Transaction;
 
 class Buyer extends User

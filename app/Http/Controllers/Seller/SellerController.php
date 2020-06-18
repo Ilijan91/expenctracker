@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\Seller;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\SellerService;
+use App\Http\Controllers\ApiController;
 
-class SellerController extends Controller
+class SellerController extends ApiController
 {
+    protected $sellerService;
+
+    public function __construct(SellerService $sellerService)
+    {
+        $this->sellerService = $sellerService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,9 @@ class SellerController extends Controller
      */
     public function index()
     {
-        //
+        $sellers = $this->sellerService->all();
+
+        return $this->showAll($sellers);
     }
 
     /**
@@ -46,7 +55,9 @@ class SellerController extends Controller
      */
     public function show($id)
     {
-        //
+        $seller = $this->sellerService->find($id);
+
+        return $this->showOne($seller);
     }
 
     /**

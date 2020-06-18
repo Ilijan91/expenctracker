@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Http\Controllers\ApiController;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;    
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = $this->userService->all();
+
+        return $this->showAll($users);
     }
 
     /**
@@ -35,7 +45,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
+        $rules = $this->userService->storeRules();
+
+        $this->validate($request, $rules);
+
+        $user = $this->userService->save($request);
+
+        return $this->showOne($user, 201);
     }
 
     /**
@@ -46,7 +63,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = $this->userService->findById($id);
+
+        return $this->showOne($user);
     }
 
     /**
@@ -69,7 +88,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = $this->userService->findById($id);
+
+        $rules = $this->userService->updateRules($user);
+
+        $this->validate($request, $rules);
+
+        if (!$user->isDirty()) {
+            return $this->errorResponse('You need to specify a different value to update', 422);  
+        }
+        $this->userService->update($request, $user);
+
+        return $this->showOne($user);
     }
 
     /**
@@ -80,6 +110,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = $this->userService->findById($id);
+
+        $this->userService->delete($user);
+
+        return $this->showOne($user);
     }
 }

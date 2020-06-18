@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\Buyer;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\BuyerService;
+use App\Http\Controllers\ApiController;
 
-class BuyerController extends Controller
+class BuyerController extends ApiController
 {
+    protected $buyerService;
+
+    public function __construct(BuyerService $buyerService)
+    {
+        $this->buyerService = $buyerService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,9 @@ class BuyerController extends Controller
      */
     public function index()
     {
-        //
+        $buyers = $this->buyerService->all();
+
+        return $this->showAll($buyers);
     }
 
     /**
@@ -46,7 +55,9 @@ class BuyerController extends Controller
      */
     public function show($id)
     {
-        //
+        $buyer = $this->buyerService->find($id);
+
+        return $this->showOne($buyer);
     }
 
     /**

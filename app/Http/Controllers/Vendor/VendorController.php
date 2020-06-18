@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use Illuminate\Http\Request;
 
-class VendorController extends Controller
+class VendorController extends ApiController
 {
     /**
      * Display a listing of the resource.

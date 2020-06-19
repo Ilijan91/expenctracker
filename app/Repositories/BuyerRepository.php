@@ -3,8 +3,6 @@
 namespace App\Repositories;
 
 use App\Buyer;
-use App\Repositories\BuyerRepositoryInterface;
-
 
 class BuyerRepository implements BuyerRepositoryInterface
 {

@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\Transaction;
 
-use App\Http\Controllers\ApiController;
 use Illuminate\Http\Request;
+use App\Services\TransactionService;
+use App\Http\Controllers\ApiController;
 
 class TransactionController extends ApiController
 {
+    protected $transactionService;
+
+    public function __construct(TransactionService $transactionService)
+    {
+        $this->transactionService = $transactionService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,9 @@ class TransactionController extends ApiController
      */
     public function index()
     {
-        //
+        $transactions = $this->transactionService->all();
+
+        return $this->showAll($transactions);
     }
 
     /**
@@ -46,7 +55,9 @@ class TransactionController extends ApiController
      */
     public function show($id)
     {
-        //
+        $transaction = $this->transactionService->find($id);
+
+        return $this->showOne($transaction);
     }
 
     /**

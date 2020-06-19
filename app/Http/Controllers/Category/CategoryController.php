@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\Category;
 
-use App\Http\Controllers\ApiController;
 use Illuminate\Http\Request;
+use App\Services\CategoryService;
+use App\Http\Controllers\ApiController;
 
 class CategoryController extends ApiController
 {
+    protected $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,9 @@ class CategoryController extends ApiController
      */
     public function index()
     {
-        //
+        $categories = $this->categoryService->all();
+
+        return $this->showAll($categories);
     }
 
     /**
@@ -35,7 +44,13 @@ class CategoryController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $rules = $this->categoryService->storeRules();
+
+        $this->validate($request, $rules);
+
+        $category = $this->categoryService->save($request, $rules);
+
+        return $this->showOne($category, 201);
     }
 
     /**
@@ -46,7 +61,9 @@ class CategoryController extends ApiController
      */
     public function show($id)
     {
-        //
+        $category = $this->categoryService->find($id);
+
+        return $this->showOne($category);
     }
 
     /**
@@ -69,7 +86,10 @@ class CategoryController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = $this->categoryService->find($id);
+        $this->categoryService->update($request, $category);
+    
+        return $this->showOne($category);
     }
 
     /**
@@ -80,6 +100,10 @@ class CategoryController extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $category = $this->categoryService->find($id);
+
+        $this->categoryService->delete($category);
+
+        return $this->showOne($category);
     }
 }

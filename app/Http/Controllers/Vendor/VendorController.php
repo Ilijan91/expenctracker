@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Http\Controllers\ApiController;
+
+
 use Illuminate\Http\Request;
+use App\Services\VendorService;
+use App\Http\Controllers\ApiController;
 
 class VendorController extends ApiController
 {
+    protected $vendorService;
+
+    public function __construct(VendorService $vendorService)
+    {
+        $this->vendorService = $vendorService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,9 @@ class VendorController extends ApiController
      */
     public function index()
     {
-        //
+        $vendors = $this->vendorService->all();
+
+        return $this->showAll($vendors);
     }
 
     /**
@@ -46,7 +57,9 @@ class VendorController extends ApiController
      */
     public function show($id)
     {
-        //
+        $vendor = $this->vendorService->find($id);
+
+        return $this->showOne($vendor);
     }
 
     /**

@@ -5,7 +5,7 @@ namespace App\Services;
 
 
 use App\Repositories\UserRepositoryInterface;
-use App\Traits\ApiResponser;
+
 
 class UserService 
 {

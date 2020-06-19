@@ -2,9 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Traits\ApiResponser;
 use App\User;
-
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -28,10 +26,10 @@ class UserRepository implements UserRepositoryInterface
         
         $data = $request->all();
         $data['password'] = bcrypt($request->password);
-        $data['verified'] = User::UNVERIFIED_USER;
-        $data['verification_token'] = User::generateVerificationCode();
+        $data['verified'] = $this->user::UNVERIFIED_USER;
+        $data['verification_token'] = $this->user::generateVerificationCode();
        
-        return User::create($data);
+        return $this->user::create($data);
     }
 
     public function updateUser($request, $user){
@@ -41,8 +39,8 @@ class UserRepository implements UserRepositoryInterface
         }
 
         if ($request->has('email') && $user->email != $request->email) {
-            $user->verified = User::UNVERIFIED_USER;
-            $user->verification_token = User::generateVerificationCode();
+            $user->verified = $this->user::UNVERIFIED_USER;
+            $user->verification_token = $this->user::generateVerificationCode();
             $user->email = $request->email;
         }
 

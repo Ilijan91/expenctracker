@@ -20,7 +20,7 @@ class CreateTransactionsTable extends Migration
             $table->bigInteger('buyer_id')->unsigned();
             $table->bigInteger('vendor_id')->unsigned();
             $table->timestamps();
-
+            $table->softDeletes();
             $table->foreign('buyer_id')->references('id')->on('users');
             $table->foreign('vendor_id')->references('id')->on('vendors');
         });

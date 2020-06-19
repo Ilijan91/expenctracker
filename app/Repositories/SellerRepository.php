@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Seller;
-use App\Repositories\SellerRepositoryInterface;
 
 class SellerRepository implements SellerRepositoryInterface
 {

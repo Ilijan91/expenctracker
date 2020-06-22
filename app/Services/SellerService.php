@@ -23,4 +23,27 @@ class SellerService
     public function find($id){
         return $this->sellerRepository->findSellerById($id);
     }
+
+    public function getSellerWithTransactions($transaction){
+        return $transaction->vendor->seller;
+    }
+
+    public function getSellersWithBuyer($buyer){
+        return $buyer->transactions()
+            ->with('vendor.seller')
+            ->get()
+            ->pluck('vendor.seller')
+            ->unique('id')
+            ->values();
+    }
+
+    public function getCategorySellers($category){
+        return $category->vendors()
+            ->with('seller')
+            ->get()
+            ->pluck('seller')
+            ->unique('id')
+            ->values();
+
+    }
 }

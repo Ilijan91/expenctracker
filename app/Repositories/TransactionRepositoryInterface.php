@@ -8,5 +8,5 @@ interface TransactionRepositoryInterface
 
     public function findTransactionById($id);
 
-
+    public function save($request, $vendor, $buyer);
 }

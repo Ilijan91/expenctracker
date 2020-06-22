@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Vendor;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +24,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Vendor::updated(function($vendor) {
+            if ($vendor->amount == 0 && $vendor->isAvailable()) {
+                $vendor->status = Vendor::UNAVAILABLE_VENDOR;
+
+                $vendor->save();
+            }
+        });
     }
 }

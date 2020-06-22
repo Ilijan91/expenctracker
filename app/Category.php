@@ -18,6 +18,10 @@ class Category extends Model
         'description'
     ];
 
+    protected $hidden = [
+        'pivot'
+    ];
+
     public function vendors(){
         return $this->belongsToMany(Vendor::class);
     }

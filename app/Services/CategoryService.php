@@ -43,4 +43,44 @@ class CategoryService
     public function delete($category){
         return $this->categoryRepository->deleteCategory($category);
     }
+
+    public function getCategoriesWithTransactions($transaction){
+        return $transaction->vendor->categories;
+    }
+
+    public function getCategoriesBuyer($buyer){
+        return $buyer->transactions()
+            ->with('vendor.categories')
+            ->get()
+            ->pluck('vendor.categories')
+            ->collapse()
+            ->unique('id')
+            ->values();
+            
+    }
+
+    public function getSellerCategories($seller){
+        return $seller->vendors()
+            ->whereHas('categories')
+            ->with('categories')
+            ->get()
+            ->pluck('categories')
+            ->collapse()
+            ->unique('id')
+            ->values();
+    }
+
+    public function getVendorCategories($vendor)
+    {
+        return $vendor->categories;
+    }
+
+    public function updateCategoryVendor($vendor, $category){
+        return $vendor->categories()->syncWithoutDetaching([$category->id]);
+    }
+
+    public function deleteCategoryVendor($vendor, $category){
+        return $vendor->categories()->detach($category->id);
+    }
+
 }

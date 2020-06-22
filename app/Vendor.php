@@ -24,7 +24,9 @@ class Vendor extends Model
         'seller_id',
         'amount',
     ];
-
+    protected $hidden = [
+        'pivot'
+    ];
 
     public function isAvailable(){
         return $this->status == Vendor::AVAILABLE_VENDOR;

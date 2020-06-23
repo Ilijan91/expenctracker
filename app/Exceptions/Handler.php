@@ -14,6 +14,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class Handler extends ExceptionHandler
 {
@@ -97,8 +100,19 @@ class Handler extends ExceptionHandler
                 return $this->errorResponse('Cannot remove this resource permanently. It is related with other resource', 409);
             }
         }
+        
         if ($exception instanceof TokenMismatchException) {
             return redirect()->back()->withInput($request->input());
+        }
+
+        if ($exception instanceof TokenInvalidException){
+            return $this->errorResponse('Invalid token', 400);
+        }
+        if ($exception instanceof TokenExpiredException){
+            return $this->errorResponse('Token has been expired', 400);
+        }
+        if ($exception instanceof JWTException){
+            return $this->errorResponse('Problem with token', 400);
         }
         
         if (config('app.debug')) {

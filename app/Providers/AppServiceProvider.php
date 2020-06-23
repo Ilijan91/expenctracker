@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
-use App\Vendor;
+use App\Mail\UserCreated;
+use App\User;
+use App\Vendor; 
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +27,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        User::created(function($user){
+            Mail::to($user->email)->send(new UserCreated($user));
+        });
+
+
         Vendor::updated(function($vendor) {
             if ($vendor->amount == 0 && $vendor->isAvailable()) {
                 $vendor->status = Vendor::UNAVAILABLE_VENDOR;

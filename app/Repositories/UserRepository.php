@@ -56,5 +56,14 @@ class UserRepository implements UserRepositoryInterface
         return $user->delete();
     }
 
+    public function getUserWithToken($token){
+        return $this->user::where('verification_token', $token)->firstOrFail();
+    }
+
+    public function verifyUser($user){
+        $user->verified = User::VERIFIED_USER;
+        $user->verification_token = null;
+        $user->save();
+    }
     
 }

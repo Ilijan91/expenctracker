@@ -32,6 +32,8 @@ class DatabaseSeeder extends Seeder
         $transactionsQuantity= 1000;
         $vendorQuantity= 1000;
 
+        User::flushEventListeners();// do not use event to send email
+
         factory(Category::class, $categoryQuantity)->create();
         factory(User::class, $userQuantity)->create()->each(
             function($user){

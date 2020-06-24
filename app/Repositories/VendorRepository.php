@@ -42,4 +42,6 @@ class VendorRepository implements VendorRepositoryInterface
     public function deleteVendor($vendor){
         return $vendor->delete();
     }
+
+    
 }

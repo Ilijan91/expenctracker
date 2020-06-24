@@ -1,7 +1,7 @@
 @component('mail::message')
 # Hello {{$user->name}}
 
-Thank you for create an account. Please verify your email using this button:
+You have changed email address. please verify new address by clicking on the button below:
 
 @component('mail::button', ['url' => route('verify', $user->verification_token)])
 Verify Account

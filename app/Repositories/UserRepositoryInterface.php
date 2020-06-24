@@ -15,4 +15,8 @@ interface UserRepositoryInterface
     public function updateUser($request, $user);
 
     public function deleteUser($user);
+
+    public function getUserWithToken($token);
+
+    public function verifyUser($user);
 }

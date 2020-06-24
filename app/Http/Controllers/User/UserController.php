@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\User;
+use App\Mail\UserCreated;
 use Illuminate\Http\Request;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ApiController;
 
 class UserController extends ApiController
@@ -94,9 +96,9 @@ class UserController extends ApiController
 
         $this->validate($request, $rules);
 
-        if (!$user->isDirty()) {
-            return $this->errorResponse('You need to specify a different value to update', 422);  
-        }
+        // if (!$user->isDirty()) {
+        //     return $this->errorResponse('You need to specify a different value to update', 422);  
+        // }
         $this->userService->update($request, $user);
 
         return $this->showOne($user);
@@ -118,12 +120,20 @@ class UserController extends ApiController
     }
 
     public function verify($token){
-        $user = User::where('verification_token', $token)->firstOrFail();
 
-        $user->verified = User::VERIFIED_USER;
-        $user->verification_token = null;
-        $user->save();
+        $user = $this->userService->getUserWithToken($token);
 
+        $this->userService->verifyUser($user);
+    
         return $this->showMessage('Account is verified');
+    }
+
+    public function resend(User $user){
+        if($user->isVerified()){
+            return $this->errorResponse('Account is allready verified', 409);
+        }
+        $this->userService->sendEmail($user->email, new UserCreated($user));
+        
+        return $this->showMessage('Verification email has been resend');
     }
 }

@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use Illuminate\Support\Facades\Mail;
 use App\Repositories\UserRepositoryInterface;
 
 
@@ -57,4 +58,15 @@ class UserService
         return $this->userRepository->deleteUser($user);
     }
     
+    public function getUserWithToken($token){
+        return $this->userRepository->getUserWithToken($token);
+    }
+
+    public function verifyUser($user){
+        return $this->userRepository->verifyUser($user);
+    }
+
+    public function sendEmail($to, $send){
+        return Mail::to($to)->send($send);
+    }
 }

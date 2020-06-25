@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Category;
+use App\Transformers\UserTransformer;
 use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,7 +20,8 @@ class User extends Authenticatable implements JWTSubject
 
     const VERIFIED_USER= '1';
     const UNVERIFIED_USER= '0';
-
+    public $transformer = UserTransformer::class;
+    
     protected $table = 'users';
     /**
      * The attributes that are mass assignable.

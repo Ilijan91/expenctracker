@@ -5,6 +5,7 @@ namespace App;
 use App\User;
 use App\Vendor;
 use Illuminate\Database\Eloquent\Model;
+use App\Transformers\CategoryTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
@@ -17,7 +18,7 @@ class Category extends Model
         'name',
         'description'
     ];
-
+    public $transformer = CategoryTransformer::class;
     protected $hidden = [
         'pivot'
     ];

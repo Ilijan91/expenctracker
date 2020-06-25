@@ -5,6 +5,7 @@ namespace App;
 use App\Seller;
 use App\Category;
 use App\Transaction;
+use App\Transformers\VendorTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -16,6 +17,7 @@ class Vendor extends Model
     
     const AVAILABLE_VENDOR='available';
     const UNAVAILABLE_VENDOR='unavailable';
+    public $transformer = VendorTransformer::class;
 
     protected $fillable = [
         'name',

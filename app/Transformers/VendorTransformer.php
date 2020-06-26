@@ -44,4 +44,19 @@ class VendorTransformer extends TransformerAbstract
             'deletedDate' => isset($vendor->deleted_at) ? (string) $vendor->deleted_at : null,
         ];
     }
+
+    public static function attribute($index){
+        $attributes = [
+            'identifier' => 'id',
+            'title' => 'name',
+            'details' => 'description',
+            'quantity' => 'amount',
+            'situation' => 'status',
+            'seller' => 'seller_id',
+            'creationDate' => 'created_at',
+            'lastChange' => 'updated_at',
+            'deletedDate' =>'deleted_at',
+        ];
+        return isset($attributes[$index]) ? $attributes[$index] : null;    
+    }
 }

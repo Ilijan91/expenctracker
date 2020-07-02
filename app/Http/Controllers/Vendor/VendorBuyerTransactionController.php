@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Vendor;
 use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
+use App\Services\VendorService;
 use Illuminate\Support\Facades\DB;
 use App\Services\TransactionService;
 use App\Http\Controllers\ApiController;
-use App\Services\VendorService;
+use App\Transformers\TransactionTransformer;
 
 class VendorBuyerTransactionController extends ApiController
 {
@@ -18,6 +19,7 @@ class VendorBuyerTransactionController extends ApiController
     {
         $this->transactionService = $transactionService;
         $this->vendorService = $vendorService;
+        $this->middleware('transform.input:' . TransactionTransformer::class)->only(['store']);
     }
     /**
      * Store a newly created resource in storage.
@@ -44,23 +46,19 @@ class VendorBuyerTransactionController extends ApiController
         }
 
         if (!$vendor->isAvailable()) {
-            return $this->errorResponse('The vendor is not available', 409);   
+            return $this->errorResponse('The vendor is not available', 409);
         }
 
         if ($vendor->amount < $request->amount) {
-            return $this->errorResponse('The vendor does not have enough units for this transaction', 409);   
+            return $this->errorResponse('The vendor does not have enough units for this transaction', 409);
         }
 
-        return DB::transaction(function() use ($request, $vendor, $buyer) {
+        return DB::transaction(function () use ($request, $vendor, $buyer) {
             $this->vendorService->save($vendor, $request);
 
             $transaction = $this->transactionService->save($request, $vendor, $buyer);
 
             return $this->showOne($transaction, 201);
         });
-
-
-
     }
-
 }

@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Seller;
+use App\Vendor;
 use Illuminate\Http\Request;
 use App\Services\VendorService;
 use App\Http\Controllers\ApiController;
-use App\Vendor;
+use App\Transformers\VendorTransformer;
 
 class SellerVendorController extends ApiController
 {
@@ -15,6 +16,8 @@ class SellerVendorController extends ApiController
     public function __construct(VendorService $vendorService)
     {
         $this->vendorService = $vendorService;
+
+        $this->middleware('transform.input:' . VendorTransformer::class)->only(['store', 'update']);
     }
     /**
      * Display a listing of the resource.
@@ -53,7 +56,6 @@ class SellerVendorController extends ApiController
         $vendor = $this->vendorService->saveSellerVendor($request, $seller);
 
         return $this->showOne($vendor);
-
     }
 
     /**

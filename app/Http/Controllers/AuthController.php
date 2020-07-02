@@ -14,7 +14,6 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('jwt', ['except' => ['login']]);
-        
     }
 
     /**
@@ -26,7 +25,7 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -79,5 +78,5 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
-    }    
+    }
 }

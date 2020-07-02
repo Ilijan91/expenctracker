@@ -15,7 +15,7 @@ class TransactionTransformer extends TransformerAbstract
     protected $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
@@ -24,7 +24,7 @@ class TransactionTransformer extends TransformerAbstract
     protected $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
@@ -33,18 +33,43 @@ class TransactionTransformer extends TransformerAbstract
     public function transform(Transaction $transaction)
     {
         return [
-            'identifier' => (int)$transaction->id,
-            'quantity' => (int)$transaction->amount,
-            'buyer' => (int)$transaction->buyer_id,
-            'product' => (int)$transaction->vendor_id,
-            'currency' => (string)$transaction->currency,
-            'creationDate' => (string)$transaction->created_at,
-            'lastChange' => (string)$transaction->updated_at,
+            'identifier' => (int) $transaction->id,
+            'quantity' => (int) $transaction->amount,
+            'buyer' => (int) $transaction->buyer_id,
+            'product' => (int) $transaction->vendor_id,
+            'currency' => (string) $transaction->currency,
+            'creationDate' => (string) $transaction->created_at,
+            'lastChange' => (string) $transaction->updated_at,
             'deletedDate' => isset($transaction->deleted_at) ? (string) $transaction->deleted_at : null,
+
+            'links' => [
+                [
+                    'rel' => 'self',
+                    'href' => route('transactions.show', $transaction->id),
+                ],
+                [
+                    'rel' => 'transaction.categories',
+                    'href' => route('transactions.categories.index', $transaction->id),
+                ],
+                [
+                    'rel' => 'transaction.seller',
+                    'href' => route('transactions.seller.index', $transaction->id),
+                ],
+                [
+                    'rel' => 'buyer',
+                    'href' => route('buyers.show', $transaction->buyer_id),
+                ],
+                [
+                    'rel' => 'vendor',
+                    'href' => route('vendors.show', $transaction->vendor_id),
+                ],
+            ]
+
         ];
     }
 
-    public static function attribute($index){
+    public static function attribute($index)
+    {
         $attributes = [
             'identifier' => 'id',
             'quantity' => 'amount',
@@ -53,9 +78,23 @@ class TransactionTransformer extends TransformerAbstract
             'currency' => 'currency',
             'creationDate' => 'created_at',
             'lastChange' => 'updated_at',
-            'deletedDate' =>'deleted_at',
+            'deletedDate' => 'deleted_at',
         ];
-        return isset($attributes[$index]) ? $attributes[$index] : null;    
+        return isset($attributes[$index]) ? $attributes[$index] : null;
     }
+    public static function transformedAttribute($index)
+    {
+        $attributes = [
+            'id' => 'identifier',
+            'quantity' => 'quantity',
+            'buyer_id' => 'buyer',
+            'vendor_id' => 'product',
+            'currency' => 'currency',
+            'created_at' => 'creationDate',
+            'updated_at' => 'lastChange',
+            'deleted_at' => 'deletedDate',
+        ];
 
+        return isset($attributes[$index]) ? $attributes[$index] : null;
+    }
 }

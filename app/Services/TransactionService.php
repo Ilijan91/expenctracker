@@ -13,23 +13,27 @@ class TransactionService
         $this->transactionRepository = $transactionRepository;
     }
 
-    public function all(){
+    public function all()
+    {
         return $this->transactionRepository->allTransactions();
     }
-    public function find($id){
+    public function find($id)
+    {
         return $this->transactionRepository->findTransactionById($id);
     }
 
-    public function save($request, $vendor, $buyer){
-       return $this->transactionRepository->save($request, $vendor, $buyer);
+    public function save($request, $vendor, $buyer)
+    {
+        return $this->transactionRepository->save($request, $vendor, $buyer);
     }
 
-    public function getBuyerWithTransaction($buyer)       
+    public function getBuyerWithTransaction($buyer)
     {
         return $buyer->transactions;
     }
 
-    public function getCategoryTransactions($category){
+    public function getCategoryTransactions($category)
+    {
         return $category->vendors()
             ->whereHas('transactions')
             ->with('transactions')
@@ -38,7 +42,8 @@ class TransactionService
             ->collapse();
     }
 
-    public function getSellerTransactions($seller){
+    public function getSellerTransactions($seller)
+    {
         return $seller->vendors()
             ->whereHas('transactions')
             ->with('transactions')
@@ -47,11 +52,13 @@ class TransactionService
             ->collapse();
     }
 
-    public function getVendorTransactions($vendor){
+    public function getVendorTransactions($vendor)
+    {
         return $vendor->transactions;
     }
 
-    public function saveRules(){
+    public function saveRules()
+    {
         $rules = [
             'amount' => 'required|integer|min:1',
             'currency' => 'required|in:EUR,USD,RSD',

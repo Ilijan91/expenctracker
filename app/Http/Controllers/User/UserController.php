@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ApiController;
+use App\Transformers\UserTransformer;
 
 class UserController extends ApiController
 {
@@ -15,7 +16,9 @@ class UserController extends ApiController
 
     public function __construct(UserService $userService)
     {
-        $this->userService = $userService;    
+        $this->userService = $userService;
+
+        $this->middleware('transform.input:' . UserTransformer::class)->only(['store', 'update']);
     }
     /**
      * Display a listing of the resource.
@@ -47,7 +50,7 @@ class UserController extends ApiController
      */
     public function store(Request $request)
     {
-       
+
         $rules = $this->userService->storeRules();
 
         $this->validate($request, $rules);
@@ -119,21 +122,23 @@ class UserController extends ApiController
         return $this->showOne($user);
     }
 
-    public function verify($token){
+    public function verify($token)
+    {
 
         $user = $this->userService->getUserWithToken($token);
 
         $this->userService->verifyUser($user);
-    
+
         return $this->showMessage('Account is verified');
     }
 
-    public function resend(User $user){
-        if($user->isVerified()){
+    public function resend(User $user)
+    {
+        if ($user->isVerified()) {
             return $this->errorResponse('Account is allready verified', 409);
         }
         $this->userService->sendEmail($user->email, new UserCreated($user));
-        
+
         return $this->showMessage('Verification email has been resend');
     }
 }

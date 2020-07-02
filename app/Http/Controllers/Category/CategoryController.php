@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Category;
 use Illuminate\Http\Request;
 use App\Services\CategoryService;
 use App\Http\Controllers\ApiController;
+use App\Transformers\CategoryTransformer;
 
 class CategoryController extends ApiController
 {
@@ -13,6 +14,8 @@ class CategoryController extends ApiController
     public function __construct(CategoryService $categoryService)
     {
         $this->categoryService = $categoryService;
+
+        $this->middleware('transform.input:' . CategoryTransformer::class)->only(['store', 'update']);
     }
     /**
      * Display a listing of the resource.
@@ -88,7 +91,7 @@ class CategoryController extends ApiController
     {
         $category = $this->categoryService->find($id);
         $this->categoryService->update($request, $category);
-    
+
         return $this->showOne($category);
     }
 

@@ -21,14 +21,15 @@ class TransactionRepository implements TransactionRepositoryInterface
     {
         return $this->transaction::findOrFail($id);
     }
-    
-    public function save($request, $vendor, $buyer)
+
+    public function save($request, $vendor, $buyer, $amount, $originalAmount)
     {
         return $this->transaction::create([
-            'amount' => $request->amount,
+            'amount' => $amount,
+            'original_amount' => $originalAmount,
             'buyer_id' => $buyer->id,
             'vendor_id' => $vendor->id,
-            'currency' => 'EUR',
+            'currency' => $request->currency,
         ]);
     }
 }

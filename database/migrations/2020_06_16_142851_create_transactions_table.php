@@ -15,7 +15,8 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->integer('amount')->unsigned();
+            $table->decimal('amount', 10, 3)->default(0);
+            $table->decimal('original_amount', 10, 3)->default(0);
             $table->string('currency');
             $table->bigInteger('buyer_id')->unsigned();
             $table->bigInteger('vendor_id')->unsigned();

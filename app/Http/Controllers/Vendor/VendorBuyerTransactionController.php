@@ -29,7 +29,7 @@ class VendorBuyerTransactionController extends ApiController
      */
     public function store(Request $request, Vendor $vendor, User $buyer)
     {
-        $rules = $this->transactionService->saveRules();
+        $rules = $this->transactionService->saveRules($request);
 
         $this->validate($request, $rules);
 
@@ -54,9 +54,20 @@ class VendorBuyerTransactionController extends ApiController
         }
 
         return DB::transaction(function () use ($request, $vendor, $buyer) {
+
+            if ($request->has('currency') && $request->currency != 'RSD') {
+                $exchangeRateOfCurrency = $this->transactionService->exchangeRateBetweenCurrency($request->currency, 'RSD');
+                $exchangeVendorPriceCurrency = $this->transactionService->exchangeRateBetweenCurrency('RSD', $request->currency);
+                $vendorPrice = $vendor->price * $exchangeVendorPriceCurrency;
+                $originalAmount = $request->amount * $vendorPrice;
+                $amount = $exchangeRateOfCurrency * $request->amount * $vendorPrice;
+            } else {
+                $amount = 1 * $request->amount * $vendor->price;
+                $originalAmount = $amount;
+            }
             $this->vendorService->save($vendor, $request);
 
-            $transaction = $this->transactionService->save($request, $vendor, $buyer);
+            $transaction = $this->transactionService->save($request, $vendor, $buyer, $amount, $originalAmount);
 
             return $this->showOne($transaction, 201);
         });

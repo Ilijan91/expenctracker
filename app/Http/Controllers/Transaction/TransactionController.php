@@ -23,6 +23,9 @@ class TransactionController extends ApiController
     {
         $transactions = $this->transactionService->all();
 
+        // $currency = $this->transactionService->getCurrencyList();
+        // //$currency = $this->transactionService->exchangeRateBetweenCurrency('USD', 'RSD');
+        // return response()->json($currency);
         return $this->showAll($transactions);
     }
 

@@ -34,7 +34,8 @@ class TransactionTransformer extends TransformerAbstract
     {
         return [
             'identifier' => (int) $transaction->id,
-            'quantity' => (int) $transaction->amount,
+            'quantity' => (int) $transaction->vendor->amount,
+            'totalPrice' => number_format($transaction->original_amount, 2),
             'buyer' => (int) $transaction->buyer_id,
             'product' => (int) $transaction->vendor_id,
             'currency' => (string) $transaction->currency,
@@ -73,6 +74,7 @@ class TransactionTransformer extends TransformerAbstract
         $attributes = [
             'identifier' => 'id',
             'quantity' => 'amount',
+            'totalPrice' => 'original_amount',
             'buyer' => 'buyer_id',
             'product' => 'vendor_id',
             'currency' => 'currency',
@@ -89,6 +91,7 @@ class TransactionTransformer extends TransformerAbstract
             'quantity' => 'quantity',
             'buyer_id' => 'buyer',
             'vendor_id' => 'product',
+            'original_amount' => 'totalPrice',
             'currency' => 'currency',
             'created_at' => 'creationDate',
             'updated_at' => 'lastChange',

@@ -42,10 +42,11 @@ $factory->define(Category::class, function (Faker $faker) {
 });
 
 $factory->define(Vendor::class, function (Faker $faker) {
-  
+
     return [
         'name' => $faker->word(1),
         'description' => $faker->paragraph(1),
+        'price' => $faker->numberBetween(1, 3000),
         'amount' => $faker->numberBetween(1, 10),
         'status' => $faker->randomElement([Vendor::AVAILABLE_VENDOR, Vendor::UNAVAILABLE_VENDOR]),
         'seller_id' => User::all()->random()->id,
@@ -54,12 +55,13 @@ $factory->define(Vendor::class, function (Faker $faker) {
 
 
 $factory->define(Transaction::class, function (Faker $faker) {
-    
+
     $seller = Seller::has('vendors')->get()->random();
-   
+
     $buyer = User::all()->except($seller->id)->random();
     return [
-        'amount' => $faker->numberBetween(1, 3),
+        'amount' => $faker->numberBetween(1, 3000),
+        'original_amount' => $faker->numberBetween(1, 3000),
         'buyer_id' => $buyer->id,
         'currency' => $faker->randomElement(['EUR', 'RSD', 'USD']),
         'vendor_id' => $seller->vendors->random()->id,

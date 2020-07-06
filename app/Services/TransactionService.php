@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Http;
 use App\Repositories\TransactionRepositoryInterface;
 
 class TransactionService
@@ -22,9 +23,9 @@ class TransactionService
         return $this->transactionRepository->findTransactionById($id);
     }
 
-    public function save($request, $vendor, $buyer)
+    public function save($request, $vendor, $buyer, $amount, $originalAmount)
     {
-        return $this->transactionRepository->save($request, $vendor, $buyer);
+        return $this->transactionRepository->save($request, $vendor, $buyer, $amount, $originalAmount);
     }
 
     public function getBuyerWithTransaction($buyer)
@@ -57,12 +58,31 @@ class TransactionService
         return $vendor->transactions;
     }
 
-    public function saveRules()
+    public function saveRules($request)
     {
+        $collection = $this->getCurrencyList();
+
         $rules = [
             'amount' => 'required|integer|min:1',
-            'currency' => 'required|in:EUR,USD,RSD',
+            'currency' => 'required|in:'  . $collection[$request->currency]['id'],
         ];
         return $rules;
+    }
+
+
+    public function exchangeRateBetweenCurrency($from, $to)
+    {
+        $apiKey = config('services.currency.apiKey');
+
+        return Http::get('https://free.currconv.com/api/v7/convert?q=' . $from . '_' . $to . '&compact=ultra&apiKey=' . $apiKey)
+            ->json()[$from . '_' . $to];
+    }
+
+    private function getCurrencyList()
+    {
+        $apiKey = config('services.currency.apiKey');
+
+        return Http::get('https://free.currconv.com/api/v7/currencies?apiKey=' . $apiKey)
+            ->json()['results'];
     }
 }

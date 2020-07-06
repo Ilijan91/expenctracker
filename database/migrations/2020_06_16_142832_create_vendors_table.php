@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateVendorsTable extends Migration
 {
-/**
+    /**
      * Run the migrations.
      *
      * @return void
@@ -19,21 +19,17 @@ class CreateVendorsTable extends Migration
             $table->string('name');
             $table->string('description', 1000);
             $table->integer('amount')->unsigned();
+            $table->integer('price')->unsigned();
             $table->string('status')->default(Vendor::UNAVAILABLE_VENDOR);
             $table->bigInteger('seller_id')->unsigned();
-            $table->timestamps();   
+            $table->timestamps();
             $table->softDeletes();
             $table->foreign('seller_id')->references('id')->on('users');
-            
         });
-
-        
-           
-      
     }
 
 
-   
+
 
     /**
      * Reverse the migrations.

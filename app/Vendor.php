@@ -14,9 +14,9 @@ class Vendor extends Model
     use SoftDeletes;
 
     protected $date = ['deleted_at'];
-    
-    const AVAILABLE_VENDOR='available';
-    const UNAVAILABLE_VENDOR='unavailable';
+
+    const AVAILABLE_VENDOR = 'available';
+    const UNAVAILABLE_VENDOR = 'unavailable';
     public $transformer = VendorTransformer::class;
 
     protected $fillable = [
@@ -25,24 +25,29 @@ class Vendor extends Model
         'status',
         'seller_id',
         'amount',
+        'price',
     ];
     protected $hidden = [
         'pivot'
     ];
 
-    public function isAvailable(){
+    public function isAvailable()
+    {
         return $this->status == Vendor::AVAILABLE_VENDOR;
     }
 
-    public function seller(){
+    public function seller()
+    {
         return $this->belongsTo(Seller::class);
     }
 
-    public function transactions(){
+    public function transactions()
+    {
         return $this->hasMany(Transaction::class);
     }
 
-    public function categories(){
+    public function categories()
+    {
         return $this->belongsToMany(Category::class);
     }
 }

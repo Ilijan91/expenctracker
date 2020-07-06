@@ -17,17 +17,19 @@ class Transaction extends Model
 
     protected $fillable = [
         'amount',
+        'original_amount',
         'buyer_id',
         'vendor_id',
         'currency',
     ];
 
-    public function buyer(){
+    public function buyer()
+    {
         return $this->belongsTo(Buyer::class);
     }
 
-    public function vendor(){
+    public function vendor()
+    {
         return $this->belongsTo(Vendor::class);
     }
-    
 }

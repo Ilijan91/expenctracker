@@ -65,5 +65,6 @@ $factory->define(Transaction::class, function (Faker $faker) {
         'buyer_id' => $buyer->id,
         'currency' => $faker->randomElement(['EUR', 'RSD', 'USD']),
         'vendor_id' => $seller->vendors->random()->id,
+        'created_at' => $faker->date(),
     ];
 });

@@ -83,8 +83,8 @@ class TransactionService
     {
         $key = "exchange.rate.between.currency." . $from . "." . $to;
         $cacheKey = $this->getCacheKey($key);
-
         $apiKey = config('services.currency.apiKey');
+
         return Cache::remember($cacheKey, Carbon::now()->addHours(24), function () use ($from, $to, $apiKey) {
             return Http::get('https://free.currconv.com/api/v7/convert?q=' . $from . '_' . $to . '&compact=ultra&apiKey=' . $apiKey)
                 ->json()[$from . '_' . $to];

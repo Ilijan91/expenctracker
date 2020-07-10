@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Category;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use App\Repositories\TransactionRepositoryInterface;
@@ -31,10 +32,22 @@ class TransactionService
         return $this->transactionRepository->save($request, $vendor, $buyer, $amount, $originalAmount);
     }
 
+    public function getBuyerCategoryWithTransaction($category, $buyer)
+    {
+        return $category->vendors()
+            ->whereHas('transactions')
+            ->with('transactions')
+            ->get()
+            ->pluck('transactions')
+            ->collapse()
+            ->where('buyer_id', $buyer->id)
+            ->values();
+    }
     public function getBuyerWithTransaction($buyer)
     {
         return $buyer->transactions;
     }
+
 
     public function getCategoryTransactions($category)
     {
@@ -45,6 +58,8 @@ class TransactionService
             ->pluck('transactions')
             ->collapse();
     }
+
+
 
     public function getSellerTransactions($seller)
     {

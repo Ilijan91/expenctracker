@@ -9,16 +9,19 @@ use App\Services\VendorService;
 use Illuminate\Support\Facades\DB;
 use App\Services\TransactionService;
 use App\Http\Controllers\ApiController;
+use App\Mail\TransactionCreated;
+use App\Services\UserService;
 use App\Transformers\TransactionTransformer;
 
 class VendorBuyerTransactionController extends ApiController
 {
     protected $transactionService;
 
-    public function __construct(TransactionService $transactionService, VendorService $vendorService)
+    public function __construct(TransactionService $transactionService, VendorService $vendorService, UserService $userService)
     {
         $this->transactionService = $transactionService;
         $this->vendorService = $vendorService;
+        $this->userService = $userService;
         $this->middleware('transform.input:' . TransactionTransformer::class)->only(['store']);
     }
     /**
@@ -68,6 +71,7 @@ class VendorBuyerTransactionController extends ApiController
             $this->vendorService->save($vendor, $request);
 
             $transaction = $this->transactionService->save($request, $vendor, $buyer, $amount, $originalAmount);
+            $this->userService->sendEmail($buyer, new TransactionCreated($buyer, $vendor));
 
             return $this->showOne($transaction, 201);
         });

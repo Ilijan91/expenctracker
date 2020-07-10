@@ -101,9 +101,9 @@ class Handler extends ExceptionHandler
                 return $this->errorResponse('Cannot remove this resource permanently. It is related with other resource', 409);
             }
         }
-        if ($exception instanceof ErrorException) {
-            return $this->errorResponse('The currency method for the request is invalid', 405);
-        }
+        // if ($exception instanceof ErrorException) {
+        //     return $this->errorResponse('The currency method for the request is invalid', 405);
+        // }
         if ($exception instanceof TokenMismatchException) {
             return redirect()->back()->withInput($request->input());
         }

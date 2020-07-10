@@ -24,6 +24,8 @@ class BuyerTransactionController extends ApiController
     {
         $transaction = $this->transactionService->getBuyerWithTransaction($buyer);
 
+        // dd(count($transaction));
+
         return $this->showAll($transaction);
     }
 

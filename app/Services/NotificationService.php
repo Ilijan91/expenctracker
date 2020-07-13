@@ -2,27 +2,32 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\DB;
+
 class NotificationService
 {
 
 
     protected $transactionService;
     protected $categoryService;
+    protected $vendorService;
 
-    public function __construct(TransactionService $transactionService, CategoryService $categoryService)
+    public function __construct(TransactionService $transactionService, CategoryService $categoryService, VendorService $vendorService)
     {
         $this->transactionService = $transactionService;
         $this->categoryService = $categoryService;
+        $this->vendorService = $vendorService;
     }
 
     public function all($buyer)
     {
         return  [
-            'averagePerDay' => ['amount' => $this->averagePerDate($buyer, 'D'), 'currency' => 'RSD'],
-            'averagePerWeek' => ['amount' => $this->averagePerDate($buyer, 'W'), 'currency' => 'RSD'],
-            'averagePerMonth' => ['amount' => $this->averagePerDate($buyer, 'M'), 'currency' => 'RSD'],
-            'averagePerYear' => ['amount' => $this->averagePerDate($buyer, 'Y'), 'currency' => 'RSD'],
-            'averagePerCategory' => ['amount' => $this->averagePerCategory($buyer), 'currency' => 'RSD']
+            'averagePerDay' => $this->averagePerDate($buyer, 'D'), 'currency' => 'RSD',
+            'averagePerWeek' => $this->averagePerDate($buyer, 'W'), 'currency' => 'RSD',
+            'averagePerMonth' => $this->averagePerDate($buyer, 'M'), 'currency' => 'RSD',
+            'averagePerYear' => $this->averagePerDate($buyer, 'Y'), 'currency' => 'RSD',
+            'averagePerCategory' => $this->averagePerCategory($buyer), 'currency' => 'RSD',
+            'topVendors' => $this->topVendors($buyer)
         ];
     }
 
@@ -75,5 +80,17 @@ class NotificationService
             $average_prices[$category->name] = array_sum($total)  / count($total);
         }
         return $average_prices;
+    }
+
+    private function topVendors($buyer)
+    {
+        $vendors = $this->vendorService->getBuyerVendors($buyer);
+
+        $uniques = array();
+        foreach ($vendors as $obj) {
+            $uniques[$obj->name] = $obj->created_at;
+        }
+
+        return $uniques;
     }
 }

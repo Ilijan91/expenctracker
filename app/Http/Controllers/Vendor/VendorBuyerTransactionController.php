@@ -34,6 +34,7 @@ class VendorBuyerTransactionController extends ApiController
     {
         $rules = $this->transactionService->saveRules($request);
 
+
         $this->validate($request, $rules);
 
         if ($buyer->id == $vendor->seller_id) {
@@ -72,7 +73,7 @@ class VendorBuyerTransactionController extends ApiController
 
             $transaction = $this->transactionService->save($request, $vendor, $buyer, $amount, $originalAmount);
             $this->userService->sendEmail($buyer, new TransactionCreated($buyer, $vendor));
-
+            $this->userService->sendSms();
             return $this->showOne($transaction, 201);
         });
     }

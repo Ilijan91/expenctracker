@@ -33,5 +33,8 @@ return [
     'currency' => [
         'apiKey' => env('API_KEY'),
     ],
+    'nexmo' => [
+        'sms_from' => '15556666666',
+    ],
 
 ];

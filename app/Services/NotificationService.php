@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\DB;
 
 class NotificationService
 {
@@ -22,12 +21,13 @@ class NotificationService
     public function all($buyer)
     {
         return  [
-            'averagePerDay' => $this->averagePerDate($buyer, 'D'), 'currency' => 'RSD',
-            'averagePerWeek' => $this->averagePerDate($buyer, 'W'), 'currency' => 'RSD',
-            'averagePerMonth' => $this->averagePerDate($buyer, 'M'), 'currency' => 'RSD',
-            'averagePerYear' => $this->averagePerDate($buyer, 'Y'), 'currency' => 'RSD',
-            'averagePerCategory' => $this->averagePerCategory($buyer), 'currency' => 'RSD',
-            'topVendors' => $this->topVendors($buyer)
+            'currency' => 'RSD',
+            'averagePerDay' => $this->averagePerDate($buyer, 'D'),
+            'averagePerWeek' => $this->averagePerDate($buyer, 'W'),
+            'averagePerMonth' => $this->averagePerDate($buyer, 'M'),
+            'averagePerYear' => $this->averagePerDate($buyer, 'Y'),
+            'averagePerCategory' => $this->averagePerCategory($buyer),
+            'topVendors' => $this->topVendors($buyer),
         ];
     }
 

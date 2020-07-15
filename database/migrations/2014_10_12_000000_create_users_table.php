@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateUsersTable extends Migration
 {
-     /**
+    /**
      * Run the migrations.
      *
      * @return void
@@ -18,6 +18,8 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique();
+            $table->integer('phone')->unique();
+            $table->string('notification');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('verified')->default(User::UNVERIFIED_USER);

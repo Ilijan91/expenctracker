@@ -15,15 +15,19 @@ class TransactionCreated extends Mailable
 
     public $buyer;
     public $vendor;
+    public $amount;
+    public $request;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $buyer, Vendor $vendor)
+    public function __construct(User $buyer, Vendor $vendor, $amount, $request)
     {
         $this->buyer = $buyer;
         $this->vendor = $vendor;
+        $this->amount = $amount;
+        $this->request = $request;
     }
 
     /**

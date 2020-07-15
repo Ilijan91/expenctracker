@@ -20,6 +20,10 @@ class TransformInput
         $transformedInput = [];
 
         foreach ($request->request->all() as $input => $value) {
+            if ($request->has('password')) {
+                $transformedInput['password'] = $request->password;
+                $transformedInput['password_confirmation'] = $request->password_confirmation;
+            }
             $transformedInput[$transformer::attribute($input)] = $value;
         }
 
@@ -33,9 +37,14 @@ class TransformInput
             $transformedErrors = [];
 
             foreach ($data->error as $field => $error) {
-                $transformedField = $transformer::transformedAttribute($field);
+                if ($request->has('password')) {
+                    $transformedField = 'password';
+                    $transformedErrors[$transformedField] = str_replace($field, $transformedField, $error);
+                } else {
+                    $transformedField = $transformer::transformedAttribute($field);
 
-                $transformedErrors[$transformedField] = str_replace($field, $transformedField, $error);
+                    $transformedErrors[$transformedField] = str_replace($field, $transformedField, $error);
+                }
             }
 
             $data->error = $transformedErrors;

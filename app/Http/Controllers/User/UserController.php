@@ -16,9 +16,8 @@ class UserController extends ApiController
 
     public function __construct(UserService $userService)
     {
-        $this->userService = $userService;
-
         $this->middleware('transform.input:' . UserTransformer::class)->only(['store', 'update']);
+        $this->userService = $userService;
     }
     /**
      * Display a listing of the resource.
@@ -50,7 +49,7 @@ class UserController extends ApiController
      */
     public function store(Request $request)
     {
-
+        // dd($request->all());
         $rules = $this->userService->storeRules();
 
         $this->validate($request, $rules);

@@ -40,6 +40,8 @@ class UserService
     {
         $rules = [
             'name' => 'required',
+            'phone' => 'required',
+            'notification' => 'required|in:SMS,EMAIL,SMS.EMAIL',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed',
         ];
@@ -82,12 +84,12 @@ class UserService
         return Mail::to($to)->send($send);
     }
 
-    public function sendSms()
+    public function sendSms($buyer, $amount, $request)
     {
         return Nexmo::message()->send([
-            'to' => '+381665105410',
+            'to' => '+381' . $buyer->phone,
             'from' => '15556666666',
-            'text' => 'You have just made new transaction'
+            'text' => 'You have just made new transaction amount ' . $amount . ' ' . $request->currency
         ]);
     }
 }

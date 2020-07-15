@@ -72,8 +72,11 @@ class VendorBuyerTransactionController extends ApiController
             $this->vendorService->save($vendor, $request);
 
             $transaction = $this->transactionService->save($request, $vendor, $buyer, $amount, $originalAmount);
-            $this->userService->sendEmail($buyer, new TransactionCreated($buyer, $vendor));
-            $this->userService->sendSms();
+            if ($buyer->notification == 'SMS' || $buyer->notification == 'SMS.EMAIL') {
+                $this->userService->sendSms($buyer, $amount, $request);
+            }
+            $this->userService->sendEmail($buyer, new TransactionCreated($buyer, $vendor, $amount, $request));
+
             return $this->showOne($transaction, 201);
         });
     }

@@ -18,10 +18,10 @@ class User extends Authenticatable implements JWTSubject
     protected $date = ['deleted_at'];
 
 
-    const VERIFIED_USER= '1';
-    const UNVERIFIED_USER= '0';
+    const VERIFIED_USER = '1';
+    const UNVERIFIED_USER = '0';
     public $transformer = UserTransformer::class;
-    
+
     protected $table = 'users';
     /**
      * The attributes that are mass assignable.
@@ -29,8 +29,10 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 
-        'email', 
+        'name',
+        'email',
+        'phone',
+        'notification',
         'password',
         'verified',
         'verification_token',
@@ -54,19 +56,22 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    public function isVerified(){
+    public function isVerified()
+    {
         return $this->verified == User::VERIFIED_USER;
     }
 
-    public static function generateVerificationCode(){
+    public static function generateVerificationCode()
+    {
         return Str::random(40);
     }
 
-    public function categories(){
+    public function categories()
+    {
         return $this->belongsToMany(Category::class);
     }
 
-     /**
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
@@ -76,7 +81,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
-     /**
+    /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
      * @return array

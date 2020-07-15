@@ -36,6 +36,8 @@ class UserTransformer extends TransformerAbstract
             'identifier' => (int) $user->id,
             'name' => (string) $user->name,
             'email' => (string) $user->email,
+            'phone' => (int) $user->phone,
+            'notification' => (string) $user->notification,
             'isVerified' => (int) $user->verified,
             'creationDate' => (string) $user->created_at,
             'lastChange' => (string) $user->updated_at,
@@ -55,7 +57,9 @@ class UserTransformer extends TransformerAbstract
         $attributes = [
             'identifier' => 'id',
             'name' => 'name',
+            'notification' => 'notification',
             'email' => 'email',
+            'phone' => 'phone',
             'isVerified' => 'verified',
             'creationDate' => 'created_at',
             'lastChange' => 'updated_at',
@@ -68,7 +72,9 @@ class UserTransformer extends TransformerAbstract
         $attributes = [
             'id' => 'identifier',
             'name' => 'name',
+            'notification' => 'notification',
             'email' => 'email',
+            'phone' => 'phone',
             'verified' => 'isVerified',
             'created_at' => 'creationDate',
             'updated_at' => 'lastChange',

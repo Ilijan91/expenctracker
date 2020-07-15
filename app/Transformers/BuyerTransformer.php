@@ -35,6 +35,8 @@ class BuyerTransformer extends TransformerAbstract
         return [
             'identifier' => (int) $buyer->id,
             'name' => (string) $buyer->name,
+            'notification' => (string) $buyer->notification,
+            'phone' => (int) $buyer->phone,
             'email' => (string) $buyer->email,
             'isVerified' => (int) $buyer->verified,
             'creationDate' => (string) $buyer->created_at,
@@ -76,6 +78,8 @@ class BuyerTransformer extends TransformerAbstract
         $attributes = [
             'identifier' => 'id',
             'name' => 'name',
+            'notification' => 'notification',
+            'phone' => 'phone',
             'email' => 'email',
             'isVerified' => 'verified',
             'creationDate' => 'created_at',
@@ -90,6 +94,8 @@ class BuyerTransformer extends TransformerAbstract
         $attributes = [
             'id' => 'identifier',
             'name' => 'name',
+            'notification' => 'notification',
+            'phone' => 'phone',
             'email' => 'email',
             'verified' => 'isVerified',
             'created_at' => 'creationDate',

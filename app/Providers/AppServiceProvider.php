@@ -37,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
         });
         User::created(function ($user) {
             Mail::to($user->email)->send(new UserCreated($user));
+
+            //send report every 5 minute
         });
 
 

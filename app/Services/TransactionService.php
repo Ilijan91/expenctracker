@@ -84,12 +84,11 @@ class TransactionService
 
     public function saveRules($request)
     {
-        //'currency' => 'required|in:'  . $collection[$request->currency]['id'],
         $collection = $this->getCurrencyList();
 
         $rules = [
             'amount' => 'required|integer|min:1',
-            'currency' => 'required|in:EUR,USD,RSD',
+            'currency' => 'required|in:'  . $collection[$request->currency]['id'],
         ];
         return $rules;
     }

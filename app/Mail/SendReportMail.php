@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Mail;
+
+
+use App\User;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class SendReportMail extends Mailable
+{
+    use Queueable, SerializesModels;
+    public $rep;
+    public $buyer;
+
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct($rep, User $buyer)
+    {
+        $this->rep = $rep;
+        $this->buyer = $buyer;
+    }
+
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        return $this->markdown('emails.sendReport')->subject('Your spending report');
+    }
+}

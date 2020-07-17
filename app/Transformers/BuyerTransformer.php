@@ -53,6 +53,10 @@ class BuyerTransformer extends TransformerAbstract
                     'href' => route('buyer.categories.index', $buyer->id),
                 ],
                 [
+                    'rel' => 'buyer.stats',
+                    'href' => route('buyer.stats.index', $buyer->id),
+                ],
+                [
                     'rel' => 'buyer.vendors',
                     'href' => route('buyer.vendors.index', $buyer->id),
                 ],

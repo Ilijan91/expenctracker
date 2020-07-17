@@ -32,6 +32,7 @@ class VendorBuyerTransactionController extends ApiController
      */
     public function store(Request $request, Vendor $vendor, User $buyer)
     {
+        $this->authorize('purchase', $buyer);
         $rules = $this->transactionService->saveRules($request);
 
 

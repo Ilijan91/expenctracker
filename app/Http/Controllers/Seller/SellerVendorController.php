@@ -26,19 +26,10 @@ class SellerVendorController extends ApiController
      */
     public function index(Seller $seller)
     {
+        $this->authorize('view', $seller);
         $vendors = $this->vendorService->getSellerVendors($seller);
 
         return $this->showAll($vendors);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -49,6 +40,7 @@ class SellerVendorController extends ApiController
      */
     public function store(Request $request, Seller $seller)
     {
+        $this->authorize('sale', $seller);
         $rules = $this->vendorService->storeRules();
 
         $this->validate($request, $rules);
@@ -56,28 +48,6 @@ class SellerVendorController extends ApiController
         $vendor = $this->vendorService->saveSellerVendor($request, $seller);
 
         return $this->showOne($vendor);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Seller  $seller
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Seller $seller)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Seller  $seller
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Seller $seller)
-    {
-        //
     }
 
     /**
@@ -89,6 +59,7 @@ class SellerVendorController extends ApiController
      */
     public function update(Request $request, Seller $seller, Vendor $vendor)
     {
+        $this->authorize('edit-product', $seller);
         $rules = $this->vendorService->updateRules($vendor);
 
         $this->validate($request, $rules);
@@ -116,6 +87,7 @@ class SellerVendorController extends ApiController
      */
     public function destroy(Seller $seller, Vendor $vendor)
     {
+        $this->authorize('delete-product', $seller);
         $this->vendorService->checkSeller($seller, $vendor);
 
         $this->vendorService->delete($vendor);

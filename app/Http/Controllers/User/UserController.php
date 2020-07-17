@@ -17,6 +17,7 @@ class UserController extends ApiController
     public function __construct(UserService $userService)
     {
         $this->middleware('transform.input:' . UserTransformer::class)->only(['store', 'update']);
+        $this->middleware('auth');
         $this->userService = $userService;
     }
     /**
@@ -32,16 +33,6 @@ class UserController extends ApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -49,7 +40,7 @@ class UserController extends ApiController
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+
         $rules = $this->userService->storeRules();
 
         $this->validate($request, $rules);
@@ -68,19 +59,9 @@ class UserController extends ApiController
     public function show($id)
     {
         $user = $this->userService->findById($id);
+        $this->authorize('view', $user);
 
         return $this->showOne($user);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -93,7 +74,7 @@ class UserController extends ApiController
     public function update(Request $request, $id)
     {
         $user = $this->userService->findById($id);
-
+        $this->authorize('update', $user);
         $rules = $this->userService->updateRules($user);
 
         $this->validate($request, $rules);
@@ -105,7 +86,6 @@ class UserController extends ApiController
 
         return $this->showOne($user);
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -115,7 +95,7 @@ class UserController extends ApiController
     public function destroy($id)
     {
         $user = $this->userService->findById($id);
-
+        $this->authorize('delete', $user);
         $this->userService->delete($user);
 
         return $this->showOne($user);

@@ -29,49 +29,6 @@ class VendorCategoryController extends ApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Vendor  $vendor
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Vendor $vendor)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Vendor  $vendor
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Vendor $vendor)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -80,6 +37,7 @@ class VendorCategoryController extends ApiController
      */
     public function update(Request $request, Vendor $vendor, Category $category)
     {
+        $this->authorize('add-category', $vendor);
         $this->categoryService->updateCategoryVendor($vendor, $category);
 
         return $this->showAll($vendor->categories);
@@ -93,6 +51,7 @@ class VendorCategoryController extends ApiController
      */
     public function destroy(Vendor $vendor, Category $category)
     {
+        $this->authorize('delete-category', $vendor);
         if (!$vendor->categories()->find($category->id)) {
             return $this->errorResponse('The specified category is not a category of this vendor', 404);
         }

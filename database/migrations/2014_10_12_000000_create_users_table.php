@@ -19,7 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->integer('phone')->unique();
-            $table->string('notification');
+            $table->string('notification')->nullable();
+            $table->integer('spending_goal')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('verified')->default(User::UNVERIFIED_USER);

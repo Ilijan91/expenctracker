@@ -17,7 +17,7 @@ class UserController extends ApiController
     public function __construct(UserService $userService)
     {
         $this->middleware('transform.input:' . UserTransformer::class)->only(['store', 'update']);
-        $this->middleware('auth');
+        //$this->middleware('auth');
         $this->userService = $userService;
     }
     /**

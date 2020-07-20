@@ -32,6 +32,7 @@ Route::resource('buyer.vendors', 'Buyer\BuyerVendorController', ['only' => ['ind
 Route::resource('buyer.sellers', 'Buyer\BuyerSellerController', ['only' => ['index']]);
 Route::resource('buyer.categories', 'Buyer\BuyerCategoryController', ['only' => ['index']]);
 Route::resource('buyer.stats', 'Buyer\BuyerStatsController', ['only' => ['index']]);
+Route::resource('buyer.goals', 'Buyer\BuyerGoalsController', ['only' => ['index', 'store', 'update']]);
 
 Route::resource('categories', 'Category\CategoryController', ['except' => ['create', 'edit']]);
 Route::resource('category.vendors', 'Category\CategoryVendorController', ['only' => ['index']]);

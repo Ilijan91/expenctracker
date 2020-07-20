@@ -21,6 +21,7 @@ class TransactionPolicy
      */
     public function view(User $user, Transaction $transaction)
     {
+
         return $user->id === $transaction->buyer->id || $user->id === $transaction->vendor->seller->id;
     }
 }

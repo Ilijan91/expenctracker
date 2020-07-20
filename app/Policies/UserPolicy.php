@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Buyer;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -30,6 +31,7 @@ class UserPolicy
      */
     public function update(User $authUser, User $user)
     {
+
         return $authUser->id === $user->id;
     }
 
@@ -43,5 +45,9 @@ class UserPolicy
     public function delete(User $authUser, User $user)
     {
         return $authUser->id === $user->id;
+    }
+    public function purchase(User $user, User $buyer)
+    {
+        return $user->id === $buyer->id;
     }
 }

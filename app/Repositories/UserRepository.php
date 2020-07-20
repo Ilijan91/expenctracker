@@ -37,9 +37,11 @@ class UserRepository implements UserRepositoryInterface
 
     public function updateUser($request, $user)
     {
-
         if ($request->has('name')) {
             $user->name = $request->name;
+        }
+        if ($request->has('spending_goal')) {
+            $user->spending_goal = $request->spending_goal;
         }
 
         if ($request->has('email') && $user->email != $request->email) {

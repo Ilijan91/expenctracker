@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Buyer;
+use App\Mail\goalStatus;
 use App\Mail\SendReportMail;
 use App\Services\UserService;
 use App\Services\BuyerService;
@@ -51,11 +52,18 @@ class sendReport extends Command
         $buyers = $this->buyerService->all();
         foreach ($buyers as $buyer) {
             $report = $this->notificationService->all($buyer);
+
             $rep = [];
             foreach ($report as $key => $value) {
                 $rep[$key] = json_encode($value);
             }
+            $goals = $this->notificationService->spendingGoals($buyer);
+            $goal = [];
+            foreach ($goals as $key => $value) {
+                $goal[$key] = json_encode($value);
+            }
             $this->userService->sendEmail($buyer->email, new SendReportMail($rep, $buyer));
+            $this->userService->sendEmail($buyer->email, new goalStatus($goal, $buyer));
         }
     }
 }

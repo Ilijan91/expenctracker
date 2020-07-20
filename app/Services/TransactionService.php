@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use App\Buyer;
 use App\Category;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use App\Repositories\TransactionRepositoryInterface;
-use Carbon\Carbon;
 
 class TransactionService
 {
@@ -48,6 +49,10 @@ class TransactionService
         return $buyer->transactions;
     }
 
+    public function getBuyerWithTransactionTotalAmount(Buyer $buyer)
+    {
+        return $buyer->transactions->pluck('amount');
+    }
 
     public function getCategoryTransactions($category)
     {

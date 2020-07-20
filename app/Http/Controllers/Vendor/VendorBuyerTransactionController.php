@@ -3,25 +3,31 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\User;
+use App\Buyer;
 use App\Vendor;
 use Illuminate\Http\Request;
+use App\Services\UserService;
 use App\Services\VendorService;
+use App\Mail\TransactionCreated;
 use Illuminate\Support\Facades\DB;
 use App\Services\TransactionService;
+use App\Services\NotificationService;
 use App\Http\Controllers\ApiController;
-use App\Mail\TransactionCreated;
-use App\Services\UserService;
 use App\Transformers\TransactionTransformer;
 
 class VendorBuyerTransactionController extends ApiController
 {
     protected $transactionService;
+    protected $vendorService;
+    protected $userService;
+    protected $notificationService;
 
-    public function __construct(TransactionService $transactionService, VendorService $vendorService, UserService $userService)
+    public function __construct(TransactionService $transactionService, VendorService $vendorService, UserService $userService, NotificationService $notificationService)
     {
         $this->transactionService = $transactionService;
         $this->vendorService = $vendorService;
         $this->userService = $userService;
+        $this->notificationService = $notificationService;
         $this->middleware('transform.input:' . TransactionTransformer::class)->only(['store']);
     }
     /**
@@ -30,9 +36,10 @@ class VendorBuyerTransactionController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Vendor $vendor, User $buyer)
+    public function store(Request $request, Vendor $vendor, Buyer $buyer)
     {
         $this->authorize('purchase', $buyer);
+
         $rules = $this->transactionService->saveRules($request);
 
 
@@ -72,7 +79,18 @@ class VendorBuyerTransactionController extends ApiController
             }
             $this->vendorService->save($vendor, $request);
 
+            $amountLeft = $this->notificationService->amountLeft($buyer);
+
+            if ($amountLeft - $originalAmount < 0) {
+                return $this->errorResponse('The transaction cannot be executed you will exceed spending goal limit ' . $buyer->spending_goal, 409);
+            }
+
+            if ($amountLeft - $originalAmount == 0) {
+                return $this->errorResponse('You are have reached your target goal of spending max ' . $buyer->spending_goal, 409);
+            }
+
             $transaction = $this->transactionService->save($request, $vendor, $buyer, $amount, $originalAmount);
+
             if ($buyer->notification == 'SMS' || $buyer->notification == 'SMS.EMAIL') {
                 $this->userService->sendSms($buyer, $amount, $request);
             }

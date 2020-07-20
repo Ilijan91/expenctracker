@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Buyer;
+
 
 class NotificationService
 {
@@ -29,6 +31,32 @@ class NotificationService
             'averagePerCategory' => $this->averagePerCategory($buyer),
             'topVendors' => $this->topVendors($buyer),
         ];
+    }
+
+    public function spendingGoals($buyer)
+    {
+        return [
+            'goal_per_day' => $buyer->spending_goal,
+            'amount_spent' => $this->totalExpence($buyer),
+            'amount_left' => $this->amountLeft($buyer),
+            'currency' => 'RSD'
+        ];
+    }
+
+    public function totalExpence($buyer)
+    {
+        $transactionsAmount = $this->transactionService->getBuyerWithTransactionTotalAmount($buyer);
+
+        $totalExspence = 0;
+        foreach ($transactionsAmount as $amount) {
+            $totalExspence += $amount;
+        }
+        return $totalExspence;
+    }
+
+    public function amountLeft(Buyer $buyer)
+    {
+        return $buyer->spending_goal - $this->totalExpence($buyer);
     }
 
     private function averagePerDate($buyer, $dateFormat)

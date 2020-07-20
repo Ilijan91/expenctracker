@@ -43,6 +43,7 @@ class UserService
             'phone' => 'required',
             'notification' => 'required|in:SMS,EMAIL,SMS.EMAIL',
             'email' => 'required|email|unique:users',
+            'spending_goal' => 'int',
             'password' => 'required|min:8|confirmed',
         ];
 
@@ -54,6 +55,8 @@ class UserService
         $rules = [
             'email' => 'email|unique:users,email,' . $user->id,
             'password' => 'min:8|confirmed',
+            'spending_goal' => 'int',
+            'notification' => 'in:SMS,EMAIL,SMS.EMAIL',
         ];
 
         return $rules;

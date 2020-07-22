@@ -22,7 +22,7 @@ class BuyerTransactionController extends ApiController
      */
     public function index(Buyer $buyer)
     {
-        //$this->authorize('view', $buyer);
+        $this->authorize('view', $buyer);
         $transactions = $this->transactionService->getBuyerWithTransaction($buyer);
 
         return $this->showAll($transactions);

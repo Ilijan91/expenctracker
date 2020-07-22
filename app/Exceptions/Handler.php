@@ -104,9 +104,9 @@ class Handler extends ExceptionHandler
                 return $this->errorResponse('User phone number must be unique and minimum 9 digits', 409);
             }
         }
-        // if ($exception instanceof ErrorException) {
-        //     return $this->errorResponse('The currency method for the request is invalid', 405);
-        // }
+        if ($exception instanceof ErrorException) {
+            return $this->errorResponse('The currency method for the request is invalid', 405);
+        }
         if ($exception instanceof TokenMismatchException) {
             return redirect()->back()->withInput($request->input());
         }

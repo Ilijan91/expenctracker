@@ -52,6 +52,8 @@ class BuyerGoalsController extends ApiController
 
         $this->userService->update($request, $buyer);
 
-        return $this->showOne($buyer);
+        $goals = $this->notificationService->spendingGoals($buyer);
+
+        return response()->json(['data' => $goals, 'code' => 200], 200);
     }
 }

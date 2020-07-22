@@ -13,23 +13,29 @@ class VendorRepository implements VendorRepositoryInterface
         $this->vendor = $vendor;
     }
 
-    public function allVendors(){
+    public function allVendors()
+    {
         return $this->vendor::all();
     }
 
-    public function findVendorById($id){
+    public function findVendorById($id)
+    {
         return $this->vendor::findOrFail($id);
     }
 
-    public function saveVendor($request, $seller){
+    public function saveVendor($request, $seller)
+    {
+        dd($request);
         $data = $request->all();
+
         $data['status'] = $this->vendor::UNAVAILABLE_VENDOR;
         $data['seller_id'] = $seller->id;
 
         return $this->vendor::create($data);
     }
 
-    public function updateVendor($request, $vendor){
+    public function updateVendor($request, $vendor)
+    {
         $vendor->fill($request->only([
             'name',
             'description',
@@ -39,9 +45,8 @@ class VendorRepository implements VendorRepositoryInterface
         return $vendor->save();
     }
 
-    public function deleteVendor($vendor){
+    public function deleteVendor($vendor)
+    {
         return $vendor->delete();
     }
-
-    
 }

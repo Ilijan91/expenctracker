@@ -103,6 +103,9 @@ class Handler extends ExceptionHandler
             if ($errorCode == 1264 || $errorCode == 1062) {
                 return $this->errorResponse('User phone number must be unique and minimum 9 digits', 409);
             }
+            if ($errorCode == 1048) {
+                return $this->errorResponse('Fields cannot be empty', 409);
+            }
         }
         if ($exception instanceof ErrorException) {
             return $this->errorResponse('The currency method for the request is invalid', 405);

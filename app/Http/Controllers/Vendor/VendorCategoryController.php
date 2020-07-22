@@ -38,6 +38,7 @@ class VendorCategoryController extends ApiController
     public function update(Request $request, Vendor $vendor, Category $category)
     {
         $this->authorize('add-category', $vendor);
+
         $this->categoryService->updateCategoryVendor($vendor, $category);
 
         return $this->showAll($vendor->categories);
@@ -52,6 +53,7 @@ class VendorCategoryController extends ApiController
     public function destroy(Vendor $vendor, Category $category)
     {
         $this->authorize('delete-category', $vendor);
+
         if (!$vendor->categories()->find($category->id)) {
             return $this->errorResponse('The specified category is not a category of this vendor', 404);
         }

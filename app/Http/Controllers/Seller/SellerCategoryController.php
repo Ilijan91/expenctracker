@@ -23,6 +23,7 @@ class SellerCategoryController extends ApiController
     public function index(Seller $seller)
     {
         $this->authorize('view', $seller);
+
         $categories = $this->categoryService->getSellerCategories($seller);
 
         return $this->showAll($categories);

@@ -15,7 +15,8 @@ class VendorService
     }
 
 
-    public function all(){
+    public function all()
+    {
         return $this->vendorRepository->allVendors();
     }
 
@@ -24,22 +25,26 @@ class VendorService
         return $this->vendorRepository->findVendorById($id);
     }
 
-    public function getBuyerVendors($buyer){
+    public function getBuyerVendors($buyer)
+    {
         return $buyer->transactions()
             ->with('vendor')
             ->get()
             ->pluck('vendor');
     }
 
-    public function getCategoryVendors($category){
+    public function getCategoryVendors($category)
+    {
         return $category->vendors;
     }
 
-    public function getSellerVendors($seller){
+    public function getSellerVendors($seller)
+    {
         return $seller->vendors()->get();
     }
 
-    public function storeRules(){
+    public function storeRules()
+    {
         $rules = [
             'name' => 'required',
             'description' => 'required',
@@ -48,7 +53,8 @@ class VendorService
         return $rules;
     }
 
-    public function updateRules($vendor){
+    public function updateRules($vendor)
+    {
         $rules = [
             'amount' => 'integer|min:1',
             'status' => 'in:' . $vendor::AVAILABLE_VENDOR . ',' . $vendor::UNAVAILABLE_VENDOR,
@@ -56,27 +62,33 @@ class VendorService
         return $rules;
     }
 
-    public function saveSellerVendor($request, $seller){
-       return $this->vendorRepository->saveVendor($request, $seller);
+    public function saveSellerVendor($request, $seller)
+    {
+
+        return $this->vendorRepository->saveVendor($request, $seller);
     }
 
-    public function checkSeller($seller, $vendor){
+    public function checkSeller($seller, $vendor)
+    {
         if ($seller->id != $vendor->seller_id) {
-            throw new HttpException(422, 'The specified seller is not the actual seller of the vendor');            
+            throw new HttpException(422, 'The specified seller is not the actual seller of the vendor');
         }
     }
 
-    public function update($request, $vendor){
+    public function update($request, $vendor)
+    {
         return $this->vendorRepository->updateVendor($request, $vendor);
     }
 
-    public function delete($vendor){
+    public function delete($vendor)
+    {
         return $this->vendorRepository->deleteVendor($vendor);
     }
 
-    public function save($vendor, $request){
+    public function save($vendor, $request)
+    {
         $vendor->amount -= $request->amount;
         $vendor->save();
-        return ;
+        return;
     }
 }

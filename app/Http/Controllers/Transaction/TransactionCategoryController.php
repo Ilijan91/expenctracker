@@ -23,6 +23,7 @@ class TransactionCategoryController extends ApiController
     public function index(Transaction $transaction)
     {
         $this->authorize('view', $transaction);
+
         $categories = $this->categoryService->getCategoriesWithTransactions($transaction);
 
         return $this->showAll($categories);

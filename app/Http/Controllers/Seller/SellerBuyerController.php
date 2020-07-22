@@ -23,6 +23,8 @@ class SellerBuyerController extends ApiController
      */
     public function index(Seller $seller)
     {
+        $this->authorize('view', $seller);
+
         $buyers = $this->buyerService->getSellerBuyers($seller);
 
         return $this->showAll($buyers);

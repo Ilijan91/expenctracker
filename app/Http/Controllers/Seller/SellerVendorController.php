@@ -40,7 +40,9 @@ class SellerVendorController extends ApiController
      */
     public function store(Request $request, Seller $seller)
     {
+
         $this->authorize('sale', $seller);
+
         $rules = $this->vendorService->storeRules();
 
         $this->validate($request, $rules);

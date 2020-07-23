@@ -48,7 +48,8 @@ class VendorService
         $rules = [
             'name' => 'required',
             'description' => 'required',
-            'amount' => 'required|integer|min:1'
+            'amount' => 'required|integer|min:1',
+            'price' => 'required|integer'
         ];
         return $rules;
     }

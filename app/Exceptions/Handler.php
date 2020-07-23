@@ -107,9 +107,7 @@ class Handler extends ExceptionHandler
                 return $this->errorResponse('Fields cannot be empty', 409);
             }
         }
-        if ($exception instanceof ErrorException) {
-            return $this->errorResponse('The currency method for the request is invalid', 405);
-        }
+
         if ($exception instanceof TokenMismatchException) {
             return redirect()->back()->withInput($request->input());
         }

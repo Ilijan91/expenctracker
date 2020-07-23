@@ -25,10 +25,14 @@ class VendorRepository implements VendorRepositoryInterface
 
     public function saveVendor($request, $seller)
     {
-        dd($request);
-        $data = $request->all();
 
-        $data['status'] = $this->vendor::UNAVAILABLE_VENDOR;
+        $data = $request->all();
+        if ($request->amount < 0) {
+            $data['status'] = $this->vendor::UNAVAILABLE_VENDOR;
+        } else {
+            $data['status'] = $this->vendor::AVAILABLE_VENDOR;
+        }
+
         $data['seller_id'] = $seller->id;
 
         return $this->vendor::create($data);
